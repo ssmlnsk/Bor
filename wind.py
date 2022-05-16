@@ -1,9 +1,10 @@
 import sys
+import re
 
 import matplotlib.pyplot as plt
 import networkx as nx
 from PyQt5 import uic
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QMenuBar, QAction
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QMenuBar, QAction, QMessageBox
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from main import Trie
@@ -17,7 +18,7 @@ class Window(QWidget):
     """
     def __init__(self):
         """
-        ?
+        Инициализация окна приложения
         """
         super(Window, self).__init__()
         self.trie = Trie()
@@ -72,8 +73,8 @@ class Window(QWidget):
 
     def nx_trie(self, current=None, prev_node=None):
         """
-        ?
-        :param current: текущий ?
+        Функция записи слова
+        :param current: текущий элемент
         :param prev_node: предыдущий узел
         :return: None
         """
@@ -167,8 +168,23 @@ class MenuWindow(QWidget):
         :return: None
         """
         word = self.lineEdit.text()
-        self.w.trie.insert(word)
-        self.w.redraw()
+        if word.isalpha() == False:
+            self.warning()
+        else:
+            self.w.trie.insert(word)
+            self.w.redraw()
+
+    def warning(self):
+        """
+        Создание MessageBox при некорректном вводе
+        :return: None
+        """
+        messagebox_del = QMessageBox(self)
+        messagebox_del.setWindowTitle("Ошибка ввода")
+        messagebox_del.setText("Введите слово!")
+        messagebox_del.setIcon(QMessageBox.Warning)
+        messagebox_del.setStandardButtons(QMessageBox.Ok)
+        messagebox_del.show()
 
     def del_all_word(self):
         """
