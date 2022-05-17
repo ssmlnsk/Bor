@@ -12,7 +12,7 @@ class MyTestCase(unittest.TestCase):
         self.gui = Window()
 
     def test_GUIadd(self):
-        self.gui.Menuload()
+        self.gui.menu_load()
         QTest.mouseClick(self.gui.an_win.add_btn, QtCore.Qt.MouseButton.LeftButton)
         words = ['cat', 'calm', 'call', 'computer', 'palm']
         QTest.qWaitForWindowActive(self.gui)
@@ -24,7 +24,7 @@ class MyTestCase(unittest.TestCase):
                                                  15: 'e', 16: 'r', 18: 'p', 19: 'a', 20: 'l', 21: 'm'})
 
     def test_GUIclear(self):
-        self.gui.Menuload()
+        self.gui.menu_load()
         QTest.mouseClick(self.gui.an_win.add_btn, QtCore.Qt.MouseButton.LeftButton)
         words = ['cat', 'calm', 'call', 'computer', 'palm']
         for w in words:
@@ -37,7 +37,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(dict(self.gui.labels), dict())
 
     def test_GUIsearch(self):
-        self.gui.Menuload()
+        self.gui.menu_load()
         QTest.mouseClick(self.gui.an_win.add_btn, QtCore.Qt.MouseButton.LeftButton)
         words = ['cat', 'calm', 'call', 'computer', 'palm']
         for w in words:
@@ -53,7 +53,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(self.gui.an_win.search_res.text(), "Слово существует :D")
 
     def test_GUIremove(self):
-        self.gui.Menuload()
+        self.gui.menu_load()
         QTest.mouseClick(self.gui.an_win.add_btn, QtCore.Qt.MouseButton.LeftButton)
         words = ['cat', 'calm', 'call', 'computer', 'palm']
         for w in words:
@@ -68,7 +68,7 @@ class MyTestCase(unittest.TestCase):
                                                  17: 'a', 18: 'l', 19: 'm'})
 
     def test_GUIsaveload(self):
-        self.gui.Menuload()
+        self.gui.menu_load()
         QTest.mouseClick(self.gui.an_win.add_btn, QtCore.Qt.MouseButton.LeftButton)
         words = ['cat', 'calm', 'call', 'computer', 'palm']
         for w in words:
@@ -86,6 +86,3 @@ class MyTestCase(unittest.TestCase):
                                                  16: 'r', 18: 'p', 19: 'a', 20: 'l', 21: 'm'})
         os.remove('temp_test.db')
 
-
-if __name__ == '__main__':
-    unittest.main()

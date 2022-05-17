@@ -42,7 +42,3 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(self.trie.startsWith('comp'), True)
         self.assertEqual(self.trie.startsWith('call'), True)
         self.assertEqual(self.trie.startsWith('ro'), False)
-
-
-if __name__ == '__main__':
-    unittest.main()

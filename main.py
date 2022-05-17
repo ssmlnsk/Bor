@@ -7,7 +7,7 @@ class Trie:
     """
     def __init__(self):
         """
-
+        Инициализация класса структуры данных
         """
         self.root = defaultdict()
         self.tree_str = ''
@@ -25,8 +25,8 @@ class Trie:
 
     def clear(self):
         """
-        Функция очистки чего?
-        :return:
+        Функция очистки дерева
+        :return: None
         """
         self.root = defaultdict()
         self.tree_str = ''
@@ -42,10 +42,10 @@ class Trie:
     def delete(self, dicts, word, i):
         """
         Функция удаления
-        :param dicts: ?
+        :param dicts: список слов
         :param word: введённое слово
-        :param i: ?
-        :return: ?
+        :param i: итератор
+        :return: True/False
         """
         if i == len(word):
             if '_end' in dicts:
@@ -71,7 +71,7 @@ class Trie:
         """
         Функция поиска слова
         :param word: введённое слово
-        :return: ?
+        :return: True/False
         """
         current = self.root
         for letter in word:
@@ -85,7 +85,7 @@ class Trie:
     def startsWith(self, prefix):
         """
         Функция поиска слов по префиксу
-        :param prefix:
+        :param prefix: префикс
         :return: True/False
         """
         current = self.root
@@ -98,8 +98,8 @@ class Trie:
     def print_words(self, current=None, word=""):
         """
         Функция вывода слова
-        :param current: ?
-        :param word: ?
+        :param current: ключ элемента
+        :param word: слово
         :return: None
         """
         if current is None:
@@ -114,9 +114,9 @@ class Trie:
     def all_words(self, wlist, current=None, word=""):
         """
         Функция вывода слов
-        :param wlist: ?
-        :param current: ?
-        :param word: ?
+        :param wlist: список слов
+        :param current: текущий элемент
+        :param word: слово
         :return: wlist
         """
         if current is None:
@@ -132,8 +132,8 @@ class Trie:
     def print_trie(self, current=None, n=0):
         """
         Вывод графа слов
-        :param current: ?
-        :param n: ?
+        :param current: текущий элемент
+        :param n: количество элементов графа
         :return: None
         """
         if current is None:
@@ -143,26 +143,3 @@ class Trie:
             if "_end" not in obj:
                 self.tree_str += '    |' * n + '-' * 4 + obj + '\n'
                 self.print_trie(current[obj], n+1)
-
-
-if __name__ == "__main__":
-    test = Trie()
-    test.insert('hills')
-    test.insert('high')
-    test.insert('hole')
-    test.insert('hope')
-    test.insert('hunter')
-    test.insert('host')
-    print(test.root)
-    test.print_words()
-    print("````````````")
-    test.print_trie()
-    print(test.tree_str)
-
-    print(test.search('hello'))
-    print(test.startsWith('whe'))
-    print(test.startsWith('hi'))
-    print(test.search('girls'))
-    test.remove('high')
-    test.remove('hills')
-    test.print_words()

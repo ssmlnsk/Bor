@@ -1,9 +1,10 @@
 import sys
+import re
 
 import matplotlib.pyplot as plt
 import networkx as nx
 from PyQt5 import uic
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QMenuBar, QAction
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QMenuBar, QAction, QMessageBox
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from main import Trie
@@ -17,7 +18,7 @@ class Window(QWidget):
     """
     def __init__(self):
         """
-        ?
+        Инициализация окна приложения
         """
         super(Window, self).__init__()
         self.trie = Trie()
@@ -72,8 +73,8 @@ class Window(QWidget):
 
     def nx_trie(self, current=None, prev_node=None):
         """
-        ?
-        :param current: текущий ?
+        Функция записи слова
+        :param current: текущий элемент
         :param prev_node: предыдущий узел
         :return: None
         """
@@ -155,7 +156,7 @@ class MenuWindow(QWidget):
 
     def frm4show(self):
         """
-        Функция показа формы сохраненияи загрузки
+        Функция показа формы сохранения и загрузки
         :return: None
         """
         self.hide_all()
@@ -167,8 +168,23 @@ class MenuWindow(QWidget):
         :return: None
         """
         word = self.lineEdit.text()
-        self.w.trie.insert(word)
-        self.w.redraw()
+        if word.isalpha() == False:
+            self.warning()
+        else:
+            self.w.trie.insert(word)
+            self.w.redraw()
+
+    def warning(self):
+        """
+        Создание MessageBox при некорректном вводе
+        :return: None
+        """
+        messagebox_input = QMessageBox(self)
+        messagebox_input.setWindowTitle("Ошибка ввода")
+        messagebox_input.setText("Введите слово!")
+        messagebox_input.setIcon(QMessageBox.Warning)
+        messagebox_input.setStandardButtons(QMessageBox.Ok)
+        messagebox_input.show()
 
     def del_all_word(self):
         """
@@ -184,8 +200,13 @@ class MenuWindow(QWidget):
         :return: None
         """
         word = self.lineEdit3.text()
-        self.w.trie.remove(word)
-        self.w.redraw()
+        result = self.w.trie.search(word)
+        if result == False:
+            self.info.setText('Слово не найдено!')
+        else:
+            self.info.setText('Слово удалено!')
+            self.w.trie.remove(word)
+            self.w.redraw()
 
     def search_word(self):
         """
@@ -195,18 +216,24 @@ class MenuWindow(QWidget):
         word = self.searchEdit.text()
         result = self.w.trie.search(word)
         if result == True:
-            self.search_res.setText('Слово существует :D')
+            self.search_res.setText('Слово найдено!')
         else:
-            self.search_res.setText('Слово не найдено -_-')
+            self.search_res.setText('Слово не найдено!')
 
     def save_db(self):
         """
         Функция сохранения данных в базу данных
         :return: None
         """
+        pattern = ('/', ':', '?', '*', '"', '|', '<', '>')
+        regex = r'[\/:?*"|<>]'
         file_name = self.fileline.text()
-        words = self.w.trie.all_words([])
-        self.sqlcmds.save_it(words, file_name + '.db')
+        a = bool(re.search(regex, file_name))
+        if a == True:
+            self.file_name_warning()
+        else:
+            words = self.w.trie.all_words([])
+            self.sqlcmds.save_it(words, file_name + '.db')
 
     def load_db(self):
         """
@@ -220,6 +247,18 @@ class MenuWindow(QWidget):
             self.w.trie.insert(wrd[0])
         self.w.redraw()
 
+    def file_name_warning(self):
+        """
+        Создание MessageBox при некорректном вводе
+        :return: None
+        """
+        messagebox_file = QMessageBox(self)
+        messagebox_file.setWindowTitle("Ошибка ввода")
+        messagebox_file.setText("Имя файла не должно содержать следующих знаков:")
+        messagebox_file.setInformativeText(f''' \ / : ? * " | < > ''')
+        messagebox_file.setIcon(QMessageBox.Warning)
+        messagebox_file.setStandardButtons(QMessageBox.Ok)
+        messagebox_file.show()
 
 app = QApplication(sys.argv)
 if __name__ == '__main__':
